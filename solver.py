@@ -8,7 +8,7 @@ from utils import (
     vec_solved,
     vec_update_grid,
     list_to_vec,
-    )
+)
 
 
 def check_games_of_N_moves(grid, N):
@@ -93,4 +93,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
