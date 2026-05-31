@@ -60,13 +60,13 @@ def int_to_pos(num):
 
 
 chase_the_lights_key = {
-    "00111": [int_to_pos(3)],
-    "01010": [int_to_pos(1), int_to_pos(4)],
-    "01101": [int_to_pos(0)],
-    "10001": [int_to_pos(3), int_to_pos(4)],
-    "10110": [int_to_pos(4)],
-    "11011": [int_to_pos(2)],
-    "11100": [int_to_pos(1)],
+    '00111': [int_to_pos(3)],
+    '01010': [int_to_pos(1), int_to_pos(4)],
+    '01101': [int_to_pos(0)],
+    '10001': [int_to_pos(3), int_to_pos(4)],
+    '10110': [int_to_pos(4)],
+    '11011': [int_to_pos(2)],
+    '11100': [int_to_pos(1)],
 }
 
 

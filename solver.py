@@ -75,7 +75,7 @@ def chase_the_lights(grid):
     
     final_row = np_grid[4]
     if np.any(final_row):
-        final_row = "".join(str(x) for x in final_row)
+        final_row = ''.join(str(x) for x in final_row)
         try:
             new_moves = chase_the_lights_key[final_row]
         except KeyError:
@@ -95,30 +95,6 @@ def chase_the_lights(grid):
                     else:
                         moves.append((row + 1, col))
     
-    print(f'Chase the Lights solution: {moves}')
+    print(f'Found a solution with {len(moves)} moves: {moves}')
     return moves
-   
-
-def solve(grid, fn=chase_the_lights):
-    return fn(grid)
-
-
-def main():
-    grid = [
-        [0, 1, 0, 0, 0],
-        [1, 1, 1, 0, 0],
-        [0, 1, 0, 1, 0],
-        [0, 0, 1, 1, 1],
-        [0, 0, 0, 1, 0]
-    ]
-    
-    moves = solve(grid)
-    if moves is not None:
-        print(f'Solution found:\n{moves}')
-    else:
-        print('No solution found.')
-
-
-if __name__ == '__main__':
-    main()
 

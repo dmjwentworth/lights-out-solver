@@ -1,14 +1,15 @@
 import argparse
 import tkinter as tk
-from solver import solve
+from solver import vec_brute_force, chase_the_lights
 from utils import generate_random_grid, update_grid, colours, solved
 
 
 class Game:
-    def __init__(self, solve_mode):
+    def __init__(self, solve_mode, solver_algorithm):
         # Initialise the game state
         self.solve_mode = solve_mode
         if self.solve_mode:
+            self.solver_algorithm = solver_algorithm
             self.grid = [row[:] for row in solved]
             self.setup = True
         else:
@@ -130,7 +131,7 @@ class Game:
                 return
             
             self.grid_copy = [row[:] for row in self.grid]
-            self.solution = solve(self.grid)
+            self.solution = self.solver_algorithm(self.grid)
             
             if self.solution == []:
                 self.grid_copy = [row[:] for row in solved]
@@ -163,7 +164,33 @@ class Game:
 
 
 def main(args):
-    game = Game(solve_mode=args.solve)
+    solver_algorithm = None
+    
+    if args.solve:
+        print('Starting the game in solve mode...')
+        while True:
+            choice = input(
+"""\
+--------------------------------------
+Choose a solver algorithm
+--------------------------------------
+1. \033[1;95mBrute Force\033[0m
+2. \033[1;95mChase the Lights\033[0m
+Enter the number of your choice: \
+"""
+            )
+            if choice == '1':
+                solver_algorithm = vec_brute_force
+                print('Loading Brute Force solver...')
+                break
+            elif choice == '2':
+                solver_algorithm = chase_the_lights
+                print('Loading Chase the Lights solver...')
+                break
+            else:
+                print('Invalid choice. Please try again.')
+
+    game = Game(solve_mode=args.solve, solver_algorithm=solver_algorithm)
 
 
 if __name__ == '__main__':
