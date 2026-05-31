@@ -8,6 +8,7 @@ from utils import (
     vec_solved,
     vec_update_grid,
     list_to_vec,
+    chase_the_lights_key
 )
 
 
@@ -27,17 +28,13 @@ def check_games_of_N_moves(grid, N):
 
 
 def brute_force(grid):
-    if np.array_equal(np.array(grid, dtype=int), np_solved):
-        print('The grid is already solved.')
-        return []
-
     for N in range(1, 26):
         print(f'\033[1;34mChecking for solutions with {N} moves...\033[0m')
         moves = check_games_of_N_moves(grid, N)
         if moves is not None:
             return moves
     
-    print('No solution found.')
+    print('No solution found for this configuration.')
     return None
 
 
@@ -57,21 +54,52 @@ def vec_check_games_of_N_moves(vec_grid, N):
 
 def vec_brute_force(grid):
     vec_grid = list_to_vec(grid)
-    if np.array_equal(vec_grid, vec_solved):
-        print('The grid is already solved.')
-        return []
-    
     for N in range(1, 26):
         print(f'\033[1;34mChecking for solutions with {N} moves...\033[0m')
         moves = vec_check_games_of_N_moves(vec_grid, N)
         if moves is not None:
             return moves
     
-    print('No solution found.')
+    print('No solution found for this configuration.')
     return None
 
 
-def solve(grid, fn=vec_brute_force):
+def chase_the_lights(grid):
+    np_grid = np.array(grid, dtype=int)
+    moves = []
+    for row in range(4):
+        for col in range(5):
+            if np_grid[row][col] == 1:
+                update_grid(np_grid, row + 1, col)
+                moves.append((row + 1, col))
+    
+    final_row = np_grid[4]
+    if np.any(final_row):
+        final_row = "".join(str(x) for x in final_row)
+        try:
+            new_moves = chase_the_lights_key[final_row]
+        except KeyError:
+            print(f'No solution found for this configuration.')
+            return []
+        
+        for move in new_moves:
+            update_grid(np_grid, *move)
+            moves.append(move)
+
+        for row in range(4):
+            for col in range(5):
+                if np_grid[row][col] == 1:
+                    update_grid(np_grid, row + 1, col)
+                    if (row + 1, col) in moves:
+                        moves.remove((row + 1, col))
+                    else:
+                        moves.append((row + 1, col))
+    
+    print(f'Chase the Lights solution: {moves}')
+    return moves
+   
+
+def solve(grid, fn=chase_the_lights):
     return fn(grid)
 
 

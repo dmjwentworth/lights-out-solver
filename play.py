@@ -124,8 +124,18 @@ class Game:
         # Get the solution from the solver and display it on the buttons
         self.setup = False
         if self.solve_mode:
+            if self.grid == solved:
+                print('The grid is already solved.')
+                self.setup = True
+                return
+            
             self.grid_copy = [row[:] for row in self.grid]
             self.solution = solve(self.grid)
+            
+            if self.solution == []:
+                self.grid_copy = [row[:] for row in solved]
+                self.setup = True
+
         for move in self.solution:
             self.buttons[move[0]][move[1]].config(text='Press')
 
