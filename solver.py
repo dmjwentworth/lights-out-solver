@@ -19,7 +19,7 @@ def check_games_of_N_moves(grid, N):
     return None
 
 
-def solve(grid):
+def brute_force(grid):
     if np.array_equal(np.array(grid, dtype=int), np_solved):
         print('The grid is already solved.')
         return []
@@ -32,6 +32,10 @@ def solve(grid):
     
     print('No solution found.')
     return None
+
+
+def solve(grid, fn=brute_force):
+    return fn(grid)
 
 
 def main():

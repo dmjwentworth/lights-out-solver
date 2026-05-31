@@ -1,4 +1,3 @@
-import json
 import argparse
 import tkinter as tk
 from solver import solve
