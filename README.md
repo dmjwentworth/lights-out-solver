@@ -1,4 +1,4 @@
-## lights-off-solver
+## lights-out-solver
 
 Ensure your python environment includes `numpy`, `tqdm`, and `tkinter`!
 
