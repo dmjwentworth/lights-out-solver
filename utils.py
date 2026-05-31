@@ -99,3 +99,4 @@ def list_to_vec(grid):
 def vec_to_list(vec_grid):
     grid = np.where(vec_grid == -1, 0, 1)
     return grid.tolist()
+
