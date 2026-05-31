@@ -20,7 +20,7 @@ class Game:
         self.count = 0       
         self.streak = 0 
         self.root = tk.Tk()
-        self.root.title('Lights Off')
+        self.root.title('Lights Out')
         self.root.config(bg='black')
         self.buttons = self.make_buttons()
         self.count_label, self.streak_label = self.make_labels()
@@ -157,7 +157,7 @@ def main(args):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Lights Off Game')
+    parser = argparse.ArgumentParser(description='Lights Out Game')
     parser.add_argument(
         '--solve',
         action='store_true',
