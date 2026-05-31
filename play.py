@@ -171,9 +171,9 @@ def main(args):
         while True:
             choice = input(
 """\
---------------------------------------
+----------------------------------------
 Choose a solver algorithm
---------------------------------------
+----------------------------------------
 1. \033[1;95mBrute Force\033[0m
 2. \033[1;95mChase the Lights\033[0m
 Enter the number of your choice: \

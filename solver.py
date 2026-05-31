@@ -1,5 +1,6 @@
 import numpy as np
 from tqdm import tqdm
+from pprint import pprint
 from itertools import combinations
 from utils import (
     int_to_pos,
@@ -20,7 +21,8 @@ def check_games_of_N_moves(grid, N):
             update_grid(np_grid, i, j)
         
         if np.array_equal(np_grid, np_solved):
-            print(f'\nFound a solution with {N} moves: {moves}')
+            print(f'\nFound a solution with {N} moves:')
+            pprint(moves, width=40, compact=True)
             return moves
     
     print(f'No solution found with {N} moves.')
@@ -45,7 +47,8 @@ def vec_check_games_of_N_moves(vec_grid, N):
         
         if np.array_equal(vec_grid_copy, vec_solved):
             moves = [int_to_pos(move) for move in moves]
-            print(f'\nFound a solution with {N} moves: {moves}')
+            print(f'\nFound a solution with {N} moves:')
+            pprint(moves, width=40, compact=True)
             return moves
     
     print(f'No solution found with {N} moves.')
@@ -95,6 +98,7 @@ def chase_the_lights(grid):
                     else:
                         moves.append((row + 1, col))
     
-    print(f'Found a solution with {len(moves)} moves: {moves}')
+    print(f'Found a solution with {len(moves)} moves:')
+    pprint(moves, width=40, compact=True)
     return moves
 
