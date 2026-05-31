@@ -44,11 +44,10 @@ def brute_force(grid):
 def vec_check_games_of_N_moves(vec_grid, N):
     for moves in tqdm(combinations(range(25), N)):
         vec_grid_copy = np.copy(vec_grid)
-        moves = [int_to_pos(move) for move in moves]
-        for i, j in moves:
-            vec_update_grid(vec_grid_copy, i, j)
+        vec_update_grid(vec_grid_copy, moves)
         
         if np.array_equal(vec_grid_copy, vec_solved):
+            moves = [int_to_pos(move) for move in moves]
             print(f'\nFound a solution with {N} moves: {moves}')
             return moves
     

@@ -26,33 +26,33 @@ mid_right[1:4, 4], mid_right[2, 3] = -1, -1
 true_mid = np.ones((5, 5), dtype=int)
 true_mid[1, 2], true_mid[2, 1:4], true_mid[3, 2] = -1, -1, -1
 
-vec_toggle = {
-    (0, 0): top_left,
-    (0, 1): np.roll(top_mid, -1, axis=1),
-    (0, 2): top_mid,
-    (0, 3): np.roll(top_mid, 1, axis=1),
-    (0, 4): top_right,
-    (1, 0): np.roll(mid_left, -1, axis=0),
-    (1, 1): np.roll(true_mid, (-1, -1), axis=(0, 1)),
-    (1, 2): np.roll(true_mid, -1, axis=0),
-    (1, 3): np.roll(true_mid, (-1, 1), axis=(0, 1)),
-    (1, 4): np.roll(mid_right, -1, axis=0),
-    (2, 0): mid_left,
-    (2, 1): np.roll(true_mid, -1, axis=1),
-    (2, 2): true_mid,
-    (2, 3): np.roll(true_mid, 1, axis=1),
-    (2, 4): mid_right,
-    (3, 0): np.roll(mid_left, 1, axis=0),
-    (3, 1): np.roll(true_mid, (1, -1), axis=(0, 1)),
-    (3, 2): np.roll(true_mid, 1, axis=0),
-    (3, 3): np.roll(true_mid, (1, 1), axis=(0, 1)),
-    (3, 4): np.roll(mid_right, 1, axis=0),
-    (4, 0): bottom_left,
-    (4, 1): np.roll(bottom_mid, -1, axis=1),
-    (4, 2): bottom_mid,
-    (4, 3): np.roll(bottom_mid, 1, axis=1),
-    (4, 4): bottom_right
-}
+vec_toggle = np.array([
+    top_left,
+    np.roll(top_mid, -1, axis=1),
+    top_mid,
+    np.roll(top_mid, 1, axis=1),
+    top_right,
+    np.roll(mid_left, -1, axis=0),
+    np.roll(true_mid, (-1, -1), axis=(0, 1)),
+    np.roll(true_mid, -1, axis=0),
+    np.roll(true_mid, (-1, 1), axis=(0, 1)),
+    np.roll(mid_right, -1, axis=0),
+    mid_left,
+    np.roll(true_mid, -1, axis=1),
+    true_mid,
+    np.roll(true_mid, 1, axis=1),
+    mid_right,
+    np.roll(mid_left, 1, axis=0),
+    np.roll(true_mid, (1, -1), axis=(0, 1)),
+    np.roll(true_mid, 1, axis=0),
+    np.roll(true_mid, (1, 1), axis=(0, 1)),
+    np.roll(mid_right, 1, axis=0),
+    bottom_left,
+    np.roll(bottom_mid, -1, axis=1),
+    bottom_mid,
+    np.roll(bottom_mid, 1, axis=1),
+    bottom_right
+])
 
 
 def int_to_pos(num):
@@ -69,12 +69,11 @@ def update_grid(grid, i, j, setup=False):
                 grid[x][y] = 1 - grid[x][y]
 
 
-def vec_update_grid(vec_grid, i, j, setup=False):
+def vec_update_grid(vec_grid, moves):
     # Update the grid using vectorized operations
-    if setup:
-        vec_grid[i, j] *= -1
-    else:
-        vec_grid *= vec_toggle[(i, j)]
+    moves = np.array(moves)
+    toggles = vec_toggle[moves]
+    vec_grid *= np.prod(toggles, axis=0)
 
 
 def generate_random_grid():
