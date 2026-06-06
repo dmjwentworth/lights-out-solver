@@ -1,7 +1,7 @@
 import numpy as np
 
 np_solved = np.zeros((5, 5), dtype=int)
-vec_solved = -1 * np.ones((5, 5), dtype=int)
+vec_solved = np.ones((5, 5), dtype=int)
 solved = np_solved.tolist()
 colours = ['gray', 'blue']
 
@@ -103,11 +103,11 @@ def generate_random_grid():
 
 def list_to_vec(grid):
     np_grid = np.array(grid, dtype=int)
-    vec_grid = np.where(np_grid == 0, -1, 1)
+    vec_grid = np.where(np_grid == 0, 1, -1)
     return vec_grid
 
 
 def vec_to_list(vec_grid):
-    grid = np.where(vec_grid == -1, 0, 1)
+    grid = np.where(vec_grid == 1, 0, 1)
     return grid.tolist()
 
