@@ -90,10 +90,10 @@ def vec_update_grid(vec_grid, moves):
 def generate_random_grid():
     # Generate a random grid by applying random moves to the solved state
     np_grid = np.copy(np_solved)
-    # Number of moves to apply, between 1 and 25
-    N = np.random.randint(1, 26)
-    # Randomly select N unique moves from the 25 possible positions
-    moves = np.random.choice(25, N, replace=False)
+    # Flip a coin 25 times, heads = 1, tails = 0
+    x = np.random.choice(2, 25, replace=True)
+    # If heads, press the button and update the grid accordingly
+    moves = [i for i in range(25) if x[i] == 1]
     moves = [int_to_pos(move) for move in moves]
     for i, j in moves:
         update_grid(np_grid, i, j)
