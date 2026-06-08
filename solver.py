@@ -58,6 +58,7 @@ def vec_check_games_of_N_moves(vec_grid, N):
 
 
 def vec_brute_force(grid):
+    print('\n===== Solving via brute force (v1) =====')
     vec_grid = list_to_vec(grid)
     for N in range(1, 26):
         print(f'\033[1;34mChecking for solutions with {N} moves...\033[0m')
@@ -70,6 +71,7 @@ def vec_brute_force(grid):
 
 
 def chase_the_lights(grid):
+    print('\n==== Solving via chasing the lights ====')
     np_grid = np.array(grid, dtype=int)
     moves = []
     for row in range(4):
@@ -106,12 +108,14 @@ def chase_the_lights(grid):
 
 
 def brute_force_v2(grid):
+    print('\n===== Solving via brute force (v2) =====')
     # First, check if the solution will involve toggling any of the 5 "special"
     # positions (6, 8, 12, 16, 18)
     vec_grid = list_to_vec(grid)
     init_moves = check_initial_moves(vec_grid)
     N_init = len(init_moves)
-    vec_update_grid(vec_grid, init_moves)
+    if N_init > 0:
+        vec_update_grid(vec_grid, init_moves)
 
     # If the grid is already solved after the initial moves, return those moves
     if np.array_equal(vec_grid, vec_solved):

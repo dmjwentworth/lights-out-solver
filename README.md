@@ -16,3 +16,4 @@ ___
 1) Run `python play.py`
 2) A randomly generated board will pop up – try to solve it!
 3) The "I`m stuck" button in this mode gives instructions relative to the initial state of the board!
+
