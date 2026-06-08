@@ -1,6 +1,6 @@
 ## lights-out-solver
 
-Ensure your python environment includes `numpy`, `tqdm`, and `tkinter`!
+Ensure your python environment includes `numpy` and `tqdm`!
 
 ___
 ### Solve mode
