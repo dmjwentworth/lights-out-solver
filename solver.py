@@ -9,7 +9,9 @@ from utils import (
     vec_solved,
     vec_update_grid,
     list_to_vec,
-    chase_the_lights_key
+    chase_the_lights_key,
+    check_initial_moves,
+    remaining_moves
 )
 
 
@@ -37,7 +39,7 @@ def brute_force(grid):
             return moves
     
     print('No solution found for this configuration.')
-    return None
+    return []
 
 
 def vec_check_games_of_N_moves(vec_grid, N):
@@ -64,7 +66,7 @@ def vec_brute_force(grid):
             return moves
     
     print('No solution found for this configuration.')
-    return None
+    return []
 
 
 def chase_the_lights(grid):
@@ -101,4 +103,46 @@ def chase_the_lights(grid):
     print(f'Found a solution with {len(moves)} moves:')
     pprint(moves, width=40, compact=True)
     return moves
+
+
+def brute_force_v2(grid):
+    # First, check if the solution will involve toggling any of the 5 "special"
+    # positions (6, 8, 12, 16, 18)
+    vec_grid = list_to_vec(grid)
+    init_moves = check_initial_moves(vec_grid)
+    N_init = len(init_moves)
+    vec_update_grid(vec_grid, init_moves)
+
+    # If the grid is already solved after the initial moves, return those moves
+    if np.array_equal(vec_grid, vec_solved):
+        print(f'Found a solution with {N_init} moves:')
+        pprint(
+            [int_to_pos(move) for move in init_moves],
+            width=40,
+            compact=True
+        )
+        return init_moves
+
+    # Otherwise, we need to check combinations of the remaining moves
+    for N in range(1, 21):
+        print(
+            '\033[1;34m'
+            + f'Checking for solutions with {N_init + N} moves...'
+            + '\033[0m'
+        )
+        for moves in tqdm(combinations(remaining_moves, N)):
+            vec_grid_copy = np.copy(vec_grid)
+            vec_update_grid(vec_grid_copy, moves)
+            
+            if np.array_equal(vec_grid_copy, vec_solved):
+                moves = init_moves + list(moves)
+                moves = [int_to_pos(move) for move in moves]
+                print(f'\nFound a solution with {N_init + N} moves:')
+                pprint(moves, width=40, compact=True)
+                return moves
+            
+        print(f'No solution found with {N_init + N} moves.')
+    
+    print('No solution found for this configuration.')
+    return []
 
