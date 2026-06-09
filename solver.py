@@ -120,12 +120,9 @@ def brute_force_v2(grid):
     # If the grid is already solved after the initial moves, return those moves
     if np.array_equal(vec_grid, vec_solved):
         print(f'Found a solution with {N_init} moves:')
-        pprint(
-            [int_to_pos(move) for move in init_moves],
-            width=40,
-            compact=True
-        )
-        return init_moves
+        moves = [int_to_pos(move) for move in init_moves]
+        pprint(moves, width=40, compact=True)
+        return moves
 
     # Otherwise, we need to check combinations of the remaining moves
     for N in range(1, 21):
