@@ -1,8 +1,10 @@
 import numpy as np
 
 # -----------------------------------------------------------------------------
-# For non-vectorised updating of the grid
+# General utilities for playing Lights Out
 # -----------------------------------------------------------------------------
+
+colours = ['gray', 'blue']
 
 
 def int_to_pos(num):
@@ -40,7 +42,6 @@ def generate_random_grid():
 np_solved = np.zeros((5, 5), dtype=int)
 vec_solved = np.ones((5, 5), dtype=int)
 solved = np_solved.tolist()
-colours = ['gray', 'blue']
 
 top_left = np.ones((5, 5), dtype=int)
 top_left[0, 0], top_left[0, 1], top_left[1, 0] = -1, -1, -1
