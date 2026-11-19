@@ -11,7 +11,9 @@ from utils import (
     list_to_vec,
     chase_the_lights_key,
     check_initial_moves,
-    remaining_moves
+    remaining_moves,
+    find_coupling_parity,
+    couples
 )
 
 
@@ -143,6 +145,57 @@ def brute_force_v2(grid):
                 return moves
             
         print(f'No solution found with {N_init + N} moves.')
+    
+    print('No solution found for this configuration.')
+    return []
+
+
+def brute_force_v3(grid):
+    print('\n===== Solving via brute force (v3) =====')
+    # First, check if the solution will involve toggling any of the 5 "special"
+    # positions (6, 8, 12, 16, 18)
+    vec_grid = list_to_vec(grid)
+    init_moves = check_initial_moves(vec_grid)
+    N_init = len(init_moves)
+
+    # Find the nature of the 10 couples
+    bosons, fermions = find_coupling_parity(vec_grid)
+    husbands = [husband for husband in couples]
+    print(f'Bosons: {bosons}')
+    print(f'Fermions: {fermions}')
+
+    # If the grid is already solved after the initial moves, return those moves
+    if N_init > 0:
+        vec_update_grid(vec_grid, init_moves)
+    if np.array_equal(vec_grid, vec_solved):
+        print(f'Found a solution with {N_init} moves:')
+        moves = [int_to_pos(move) for move in init_moves]
+        pprint(moves, width=40, compact=True)
+        return moves
+
+    # Otherwise, we need to check combinations of the remaining moves
+    for N in range(1, 11):
+        print(
+            '\033[1;34m'
+            + 'Checking for solutions...'
+            + '\033[0m'
+        )
+        for pressed_husbdands in tqdm(combinations(husbands, N)):
+            pressed_wives = [couples[husband] for husband in fermions if husband not in pressed_husbdands]
+            pressed_wives += [couples[husband] for husband in pressed_husbdands if husband in bosons]
+            moves = list(pressed_husbdands) + pressed_wives
+            
+            vec_grid_copy = np.copy(vec_grid)
+            vec_update_grid(vec_grid_copy, moves)
+            
+            if np.array_equal(vec_grid_copy, vec_solved):
+                moves = init_moves + list(moves)
+                moves = [int_to_pos(move) for move in moves]
+                print(f'\nFound a solution with {len(moves)} moves:')
+                pprint(moves, width=40, compact=True)
+                return moves
+            
+        print('No solution found.')
     
     print('No solution found for this configuration.')
     return []

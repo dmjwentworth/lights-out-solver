@@ -1,4 +1,5 @@
 import numpy as np
+from patterns import one_light_key, two_light_key
 
 # -----------------------------------------------------------------------------
 # General utilities for playing Lights Out
@@ -131,13 +132,7 @@ chase_the_lights_key = {
 
 possible_init_moves = [6, 8, 12, 16, 18]
 remaining_moves = [i for i in range(25) if i not in possible_init_moves]
-one_light_key = {
-    6: [1, 3, 5, 6, 8, 9, 13, 15, 16, 17, 21],
-    8: [1, 3, 5, 6, 8, 9, 11, 17, 18, 19, 23],
-    12: [0, 1, 7, 10, 12, 13, 15, 19, 21, 22, 24],
-    16: [1, 5, 6, 7, 13, 15, 16, 18, 19, 21, 23],
-    18: [3, 7, 8, 9, 11, 15, 16, 18, 19, 21, 23]
-}
+
 
 def check_initial_moves(vec_grid):
     init_moves = []
@@ -147,4 +142,22 @@ def check_initial_moves(vec_grid):
         if np.prod(lights_of_interest) == -1:
             init_moves.append(possible_init_move)
     return init_moves
+
+
+couples = {}
+for husband, wife in two_light_key:
+    couples[husband] = wife
+
+
+def find_coupling_parity(vec_grid):
+    flat_grid = vec_grid.flatten()
+    bosons = []
+    fermions = []
+    for (husband, wife), lights in two_light_key.items():
+        lights_of_interest = flat_grid[lights]
+        if np.prod(lights_of_interest) == 1:
+            bosons.append(husband)
+        else:
+            fermions.append(husband)
+    return bosons, fermions
 
