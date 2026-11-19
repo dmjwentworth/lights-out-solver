@@ -151,6 +151,8 @@ def brute_force_v2(grid):
 
 
 def brute_force_v3(grid):
+    solutions = {}
+
     print('\n===== Solving via brute force (v3) =====')
     # First, check if the solution will involve toggling any of the 5 "special"
     # positions (6, 8, 12, 16, 18)
@@ -161,8 +163,6 @@ def brute_force_v3(grid):
     # Find the nature of the 10 couples
     bosons, fermions = find_coupling_parity(vec_grid)
     husbands = [husband for husband in couples]
-    print(f'Bosons: {bosons}')
-    print(f'Fermions: {fermions}')
 
     # If the grid is already solved after the initial moves, return those moves
     if N_init > 0:
@@ -191,12 +191,20 @@ def brute_force_v3(grid):
             if np.array_equal(vec_grid_copy, vec_solved):
                 moves = init_moves + list(moves)
                 moves = [int_to_pos(move) for move in moves]
-                print(f'\nFound a solution with {len(moves)} moves:')
+                solutions[len(moves)] = moves
+
+                print('\n' + '-' * 40)
+                print(f'Found a solution with {len(moves)} moves:')
+                print('-' * 40)
                 pprint(moves, width=40, compact=True)
-                return moves
+                print('-' * 40)
             
-        print('No solution found.')
-    
+    if len(solutions) > 0:
+        min_moves = min(solutions.keys())
+        moves = solutions[min_moves]
+        print(f'\033[1;32mBest solution has {min_moves} moves.\033[0m')
+        return moves
+
     print('No solution found for this configuration.')
     return []
 
