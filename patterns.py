@@ -54,3 +54,12 @@ brothers = {}
 for type_a, type_b  in two_light_key["brothers"]:
     brothers[type_a] = type_b
 
+two_light_key["cousins"] = {
+    (1, 10): [0, 1, 3, 6, 8, 9, 13, 15, 16, 17, 21],
+    (2, 5): [0, 3, 5, 6, 8, 9, 13, 15, 16, 17, 21]
+}
+
+cousins = {}
+for type_a, type_b in two_light_key["cousins"]:
+    cousins[type_a] = type_b
+

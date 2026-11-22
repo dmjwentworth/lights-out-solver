@@ -7,6 +7,7 @@ from patterns import (
     remaining_moves,
     couples,
     brothers,
+    cousins,
 )
 from utils import (
     int_to_pos,
@@ -177,13 +178,8 @@ def brute_force_v3(grid):
         return moves
 
     # Otherwise, we need to check combinations of the remaining moves
-    for N in range(1, 11):
-        print(
-            '\033[1;34m'
-            + 'Checking for solutions...'
-            + '\033[0m'
-        )
-        for pressed_husbdands in tqdm(combinations(husbands, N)):
+    for N in range(0, 11):
+        for pressed_husbdands in combinations(husbands, N):
             pressed_wives = [couples[husband] for husband in fermions if husband not in pressed_husbdands]
             pressed_wives += [couples[husband] for husband in pressed_husbdands if husband in bosons]
             moves = list(pressed_husbdands) + pressed_wives
@@ -196,11 +192,11 @@ def brute_force_v3(grid):
                 moves = [int_to_pos(move) for move in moves]
                 solutions[len(moves)] = moves
 
-                print('\n' + '-' * 40)
+                print('-' * 40)
                 print(f'Found a solution with {len(moves)} moves:')
                 print('-' * 40)
                 pprint(moves, width=40, compact=True)
-                print('-' * 40)
+                print('-' * 40 + '\n')
             
     if len(solutions) > 0:
         min_moves = min(solutions.keys())
@@ -222,11 +218,15 @@ def brute_force_v4(grid):
     init_moves = check_initial_moves(vec_grid)
     N_init = len(init_moves)
 
+    # Find the nature of the 2 cousin-pairs
+    bosonic_cousins, fermionic_cousins = find_coupling_parity(vec_grid, "cousins")
+    type_a_cousins = [0, 1, 2]
+
     # Find the nature of the 5 brother-pairs
     bosonic_bros, fermionic_bros = find_coupling_parity(vec_grid, "brothers")
     type_a_bros = [brother for brother in brothers]
 
-    # Find the nature of the 10 couples
+    # Find the nature of the 10 married-pairs
     bosonic_couples, fermionic_couples = find_coupling_parity(vec_grid, "couples")
     husbands = [husband for husband in couples]
 
@@ -240,16 +240,17 @@ def brute_force_v4(grid):
         return moves
 
     # Otherwise, we need to check combinations of the remaining moves
-    for N in range(1, 6):
-        print(
-            '\033[1;34m'
-            + 'Checking for solutions...'
-            + '\033[0m'
-        )
-        for pressed_a_bros in tqdm(combinations(type_a_bros, N)):
+    for N in range(0, 4):
+        for pressed_a_cousins in combinations(type_a_cousins, N):
+            print(f"Trying seed {pressed_a_cousins}...")
+
+            pressed_b_cousins = [cousins[type_a] for type_a in fermionic_cousins if type_a not in pressed_a_cousins]
+            pressed_b_cousins += [cousins[type_a] for type_a in pressed_a_cousins if type_a in bosonic_cousins]
+            pressed_a_bros = list(pressed_a_cousins) + pressed_b_cousins
+            
             pressed_b_bros = [brothers[type_a] for type_a in fermionic_bros if type_a not in pressed_a_bros]
             pressed_b_bros += [brothers[type_a] for type_a in pressed_a_bros if type_a in bosonic_bros]
-            pressed_husbdands = list(pressed_a_bros) + pressed_b_bros
+            pressed_husbdands = pressed_a_bros + pressed_b_bros
 
             pressed_wives = [couples[husband] for husband in fermionic_couples if husband not in pressed_husbdands]
             pressed_wives += [couples[husband] for husband in pressed_husbdands if husband in bosonic_couples]
@@ -263,11 +264,11 @@ def brute_force_v4(grid):
                 moves = [int_to_pos(move) for move in moves]
                 solutions[len(moves)] = moves
 
-                print('\n' + '-' * 40)
+                print('-' * 40)
                 print(f'Found a solution with {len(moves)} moves:')
                 print('-' * 40)
                 pprint(moves, width=40, compact=True)
-                print('-' * 40)
+                print('-' * 40 + '\n')
             
     if len(solutions) > 0:
         min_moves = min(solutions.keys())
