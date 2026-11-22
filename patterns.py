@@ -1,3 +1,16 @@
+chase_the_lights_key = {
+    '00111': [(0, 3)],
+    '01010': [(0, 1), (0, 4)],
+    '01101': [(0, 0)],
+    '10001': [(0, 3), (0, 4)],
+    '10110': [(0, 4)],
+    '11011': [(0, 2)],
+    '11100': [(0, 1)],
+}
+
+possible_init_moves = [6, 8, 12, 16, 18]
+remaining_moves = [i for i in range(25) if i not in possible_init_moves]
+
 one_light_key = {
     6: [1, 3, 5, 6, 8, 9, 13, 15, 16, 17, 21],
     8: [1, 3, 5, 6, 8, 9, 11, 17, 18, 19, 23],
@@ -20,4 +33,8 @@ two_light_key = {
     (0, 4): [0, 1, 5, 7, 9, 11, 12, 14, 17, 23, 24],
     (20, 24): [0, 1, 7, 10, 12, 13, 15, 17, 19, 23, 24]
 }
+
+couples = {}
+for husband, wife in two_light_key:
+    couples[husband] = wife
 

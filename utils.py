@@ -113,25 +113,8 @@ def vec_to_list(vec_grid):
 
 
 # -----------------------------------------------------------------------------
-# For the chase the lights algorithm
-# -----------------------------------------------------------------------------
-
-chase_the_lights_key = {
-    '00111': [int_to_pos(3)],
-    '01010': [int_to_pos(1), int_to_pos(4)],
-    '01101': [int_to_pos(0)],
-    '10001': [int_to_pos(3), int_to_pos(4)],
-    '10110': [int_to_pos(4)],
-    '11011': [int_to_pos(2)],
-    '11100': [int_to_pos(1)],
-}
-
-# -----------------------------------------------------------------------------
 # For the brute-force-v2 algorithm
 # -----------------------------------------------------------------------------
-
-possible_init_moves = [6, 8, 12, 16, 18]
-remaining_moves = [i for i in range(25) if i not in possible_init_moves]
 
 
 def check_initial_moves(vec_grid):
@@ -144,9 +127,9 @@ def check_initial_moves(vec_grid):
     return init_moves
 
 
-couples = {}
-for husband, wife in two_light_key:
-    couples[husband] = wife
+# -----------------------------------------------------------------------------
+# For the brute-force-v3 algorithm
+# -----------------------------------------------------------------------------
 
 
 def find_coupling_parity(vec_grid):

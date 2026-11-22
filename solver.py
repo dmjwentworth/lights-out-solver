@@ -2,6 +2,11 @@ import numpy as np
 from tqdm import tqdm
 from pprint import pprint
 from itertools import combinations
+from patterns import (
+    chase_the_lights_key,
+    remaining_moves,
+    couples
+)
 from utils import (
     int_to_pos,
     update_grid,
@@ -9,11 +14,8 @@ from utils import (
     vec_solved,
     vec_update_grid,
     list_to_vec,
-    chase_the_lights_key,
     check_initial_moves,
-    remaining_moves,
     find_coupling_parity,
-    couples
 )
 
 
