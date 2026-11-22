@@ -132,15 +132,15 @@ def check_initial_moves(vec_grid):
 # -----------------------------------------------------------------------------
 
 
-def find_coupling_parity(vec_grid):
+def find_coupling_parity(vec_grid, level):
     flat_grid = vec_grid.flatten()
     bosons = []
     fermions = []
-    for (husband, wife), lights in two_light_key.items():
+    for (light_1, light_2), lights in two_light_key[level].items():
         lights_of_interest = flat_grid[lights]
         if np.prod(lights_of_interest) == 1:
-            bosons.append(husband)
+            bosons.append(light_1)
         else:
-            fermions.append(husband)
+            fermions.append(light_1)
     return bosons, fermions
 

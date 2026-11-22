@@ -5,7 +5,8 @@ from itertools import combinations
 from patterns import (
     chase_the_lights_key,
     remaining_moves,
-    couples
+    couples,
+    brothers,
 )
 from utils import (
     int_to_pos,
@@ -163,7 +164,7 @@ def brute_force_v3(grid):
     N_init = len(init_moves)
 
     # Find the nature of the 10 couples
-    bosons, fermions = find_coupling_parity(vec_grid)
+    bosons, fermions = find_coupling_parity(vec_grid, "couples")
     husbands = [husband for husband in couples]
 
     # If the grid is already solved after the initial moves, return those moves
@@ -186,6 +187,73 @@ def brute_force_v3(grid):
             pressed_wives = [couples[husband] for husband in fermions if husband not in pressed_husbdands]
             pressed_wives += [couples[husband] for husband in pressed_husbdands if husband in bosons]
             moves = list(pressed_husbdands) + pressed_wives
+            
+            vec_grid_copy = np.copy(vec_grid)
+            vec_update_grid(vec_grid_copy, moves)
+            
+            if np.array_equal(vec_grid_copy, vec_solved):
+                moves = init_moves + list(moves)
+                moves = [int_to_pos(move) for move in moves]
+                solutions[len(moves)] = moves
+
+                print('\n' + '-' * 40)
+                print(f'Found a solution with {len(moves)} moves:')
+                print('-' * 40)
+                pprint(moves, width=40, compact=True)
+                print('-' * 40)
+            
+    if len(solutions) > 0:
+        min_moves = min(solutions.keys())
+        moves = solutions[min_moves]
+        print(f'\033[1;32mBest solution has {min_moves} moves.\033[0m')
+        return moves
+
+    print('No solution found for this configuration.')
+    return []
+
+
+def brute_force_v4(grid):
+    solutions = {}
+
+    print('\n===== Solving via brute force (v4) =====')
+    # First, check if the solution will involve toggling any of the 5 "special"
+    # positions (6, 8, 12, 16, 18)
+    vec_grid = list_to_vec(grid)
+    init_moves = check_initial_moves(vec_grid)
+    N_init = len(init_moves)
+
+    # Find the nature of the 5 brother-pairs
+    bosonic_bros, fermionic_bros = find_coupling_parity(vec_grid, "brothers")
+    type_a_bros = [brother for brother in brothers]
+
+    # Find the nature of the 10 couples
+    bosonic_couples, fermionic_couples = find_coupling_parity(vec_grid, "couples")
+    husbands = [husband for husband in couples]
+
+    # If the grid is already solved after the initial moves, return those moves
+    if N_init > 0:
+        vec_update_grid(vec_grid, init_moves)
+    if np.array_equal(vec_grid, vec_solved):
+        print(f'Found a solution with {N_init} moves:')
+        moves = [int_to_pos(move) for move in init_moves]
+        pprint(moves, width=40, compact=True)
+        return moves
+
+    # Otherwise, we need to check combinations of the remaining moves
+    for N in range(1, 6):
+        print(
+            '\033[1;34m'
+            + 'Checking for solutions...'
+            + '\033[0m'
+        )
+        for pressed_a_bros in tqdm(combinations(type_a_bros, N)):
+            pressed_b_bros = [brothers[type_a] for type_a in fermionic_bros if type_a not in pressed_a_bros]
+            pressed_b_bros += [brothers[type_a] for type_a in pressed_a_bros if type_a in bosonic_bros]
+            pressed_husbdands = list(pressed_a_bros) + pressed_b_bros
+
+            pressed_wives = [couples[husband] for husband in fermionic_couples if husband not in pressed_husbdands]
+            pressed_wives += [couples[husband] for husband in pressed_husbdands if husband in bosonic_couples]
+            moves = pressed_husbdands + pressed_wives
             
             vec_grid_copy = np.copy(vec_grid)
             vec_update_grid(vec_grid_copy, moves)

@@ -1,6 +1,6 @@
 import argparse
 import tkinter as tk
-from solver import vec_brute_force, brute_force_v2, brute_force_v3, chase_the_lights
+from solver import vec_brute_force, brute_force_v2, brute_force_v4, chase_the_lights
 from utils import generate_random_grid, update_grid, colours, solved
 
 
@@ -176,7 +176,7 @@ Choose a solver algorithm
 ----------------------------------------
 1. \033[1;95mBrute Force\033[0m
 2. \033[1;95mBrute Force v2\033[0m
-3. \033[1;95mBrute Force v3\033[0m
+3. \033[1;95mBrute Force v4\033[0m
 4. \033[1;95mChase the Lights\033[0m
 Enter the number of your choice: \
 """
@@ -190,8 +190,8 @@ Enter the number of your choice: \
                 print('Loading Brute Force v2 solver...')
                 break
             elif choice == '3':
-                solver_algorithm = brute_force_v3
-                print('Loading Brute Force v3 solver...')
+                solver_algorithm = brute_force_v4
+                print('Loading Brute Force v4 solver...')
                 break
             elif choice == '4':
                 solver_algorithm = chase_the_lights
