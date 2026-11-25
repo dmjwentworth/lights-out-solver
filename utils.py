@@ -32,8 +32,8 @@ def generate_random_grid():
     moves = [int_to_pos(move) for move in moves]
     for i, j in moves:
         update_grid(np_grid, i, j)
-    # return the list of moves and the resulting grid as a list of lists
-    return moves, np_grid.tolist()
+    # return the resulting grid as a list of lists
+    return np_grid.tolist()
 
 
 # -----------------------------------------------------------------------------

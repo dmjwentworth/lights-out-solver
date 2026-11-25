@@ -8,12 +8,12 @@ class Game:
     def __init__(self, solve_mode, solver_algorithm):
         # Initialise the game state
         self.solve_mode = solve_mode
+        self.solver_algorithm = solver_algorithm
         if self.solve_mode:
-            self.solver_algorithm = solver_algorithm
             self.grid = [row[:] for row in solved]
             self.setup = True
         else:
-            self.solution, self.grid = generate_random_grid()
+            self.grid = generate_random_grid()
             self.setup = False
         self.grid_copy = [row[:] for row in self.grid]
 
@@ -123,16 +123,15 @@ class Game:
 
     def show_solution(self):
         # Get the solution from the solver and display it on the buttons
-        self.setup = False
+        if self.grid == solved:
+            print('The grid is already solved.')
+            return
+        
+        self.grid_copy = [row[:] for row in self.grid]
+        self.solution = self.solver_algorithm(self.grid)
+
         if self.solve_mode:
-            if self.grid == solved:
-                print('The grid is already solved.')
-                self.setup = True
-                return
-            
-            self.grid_copy = [row[:] for row in self.grid]
-            self.solution = self.solver_algorithm(self.grid)
-            
+            self.setup = False
             if self.solution == []:
                 self.grid_copy = [row[:] for row in solved]
                 self.setup = True
@@ -142,7 +141,7 @@ class Game:
 
     def new_game(self):
         if not self.solve_mode:
-            self.solution, self.grid = generate_random_grid()
+            self.grid = generate_random_grid()
             self.setup = False
         else:
             self.grid = [row[:] for row in solved]
@@ -164,7 +163,7 @@ class Game:
 
 
 def main(args):
-    solver_algorithm = None
+    solver_algorithm = brute_force_v4  # default solver algorithm
     
     if args.solve:
         print('Starting the game in solve mode...')
