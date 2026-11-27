@@ -1,6 +1,14 @@
 import argparse
 import tkinter as tk
-from solver import vec_brute_force, brute_force_v2, brute_force_v4, chase_the_lights
+from solver import (
+    brute_force,
+    vec_brute_force,
+    brute_force_v2,
+    brute_force_v2_all_solutions,
+    brute_force_v3,
+    disentangle,
+    chase_the_lights,
+)
 from utils import generate_random_grid, update_grid, colours, solved
 
 
@@ -163,41 +171,13 @@ class Game:
 
 
 def main(args):
-    solver_algorithm = brute_force_v4  # default solver algorithm
+    solver_algorithm = disentangle  # default solver algorithm
     
-    if args.solve:
-        print('Starting the game in solve mode...')
-        while True:
-            choice = input(
-"""\
-----------------------------------------
-Choose a solver algorithm
-----------------------------------------
-1. \033[1;95mBrute Force\033[0m
-2. \033[1;95mBrute Force v2\033[0m
-3. \033[1;95mBrute Force v4\033[0m
-4. \033[1;95mChase the Lights\033[0m
-Enter the number of your choice: \
-"""
-            )
-            if choice == '1':
-                solver_algorithm = vec_brute_force
-                print('Loading Brute Force solver...')
-                break
-            elif choice == '2':
-                solver_algorithm = brute_force_v2
-                print('Loading Brute Force v2 solver...')
-                break
-            elif choice == '3':
-                solver_algorithm = brute_force_v4
-                print('Loading Brute Force v4 solver...')
-                break
-            elif choice == '4':
-                solver_algorithm = chase_the_lights
-                print('Loading Chase the Lights solver...')
-                break
-            else:
-                print('Invalid choice. Please try again.')
+    if args.algorithm:
+        try:
+            solver_algorithm = eval(args.algorithm)  # Use the specified solver algorithm
+        except:
+            raise ValueError(f"Invalid solver algorithm: {args.algorithm}")
 
     game = Game(solve_mode=args.solve, solver_algorithm=solver_algorithm)
 
@@ -208,6 +188,11 @@ if __name__ == '__main__':
         '--solve',
         action='store_true',
         help='Solve the grid configuration',
+    )
+    parser.add_argument(
+        '--algorithm',
+        default=None,
+        help='Choose the solver algorithm (default: disentangle)',
     )
     args = parser.parse_args()
     main(args)

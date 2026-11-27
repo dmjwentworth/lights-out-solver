@@ -1,5 +1,6 @@
+import time
 import numpy as np
-from patterns import one_light_key, two_light_key
+from patterns import one_light_key, two_light_key, three_light_key
 
 # -----------------------------------------------------------------------------
 # General utilities for playing Lights Out
@@ -96,6 +97,8 @@ vec_toggle = np.array([
 
 def vec_update_grid(vec_grid, moves):
     # Update the grid using vectorized operations
+    if not moves:
+        return
     moves = np.array(moves)
     toggles = vec_toggle[moves]
     vec_grid *= np.prod(toggles, axis=0)
@@ -143,4 +146,38 @@ def find_coupling_parity(vec_grid, level):
         else:
             fermions.append(light_1)
     return bosons, fermions
+
+
+# -----------------------------------------------------------------------------
+# For the disentangle algorithm
+# -----------------------------------------------------------------------------
+
+
+def find_n_seeds_to_choose(vec_grid):
+    flat_grid = vec_grid.flatten()
+    seeding_lights = (0, 1, 2)
+    lights_of_interest = flat_grid[three_light_key[seeding_lights]]
+    if np.prod(lights_of_interest) == 1:
+        return [0, 2]
+    else:
+        return [1, 3]
+
+
+# -----------------------------------------------------------------------------
+# For comparing the performance of algorithms
+# -----------------------------------------------------------------------------
+
+
+def timed(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        print(
+            f"Function '{func.__name__}' took "
+            f"{elapsed_time:.6f} seconds to execute."
+        )
+        return result
+    return wrapper
 
